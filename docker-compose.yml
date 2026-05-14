@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: mahasiswa-service
+    ports:
+      - "8001:8000"
+    environment:
+      - APP_ENV=local
+      - APP_KEY=${APP_KEY}
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE= database_data_mahasiswa
+      - DB_USERNAME=root
+      - DB_PASSWORD=secret
+      - API_KEY=secret-api-key-mahasiswa-123
+    depends_on:
+      - db
+    networks:
+      - education-network
+
+  db:
+    image: mysql:8.0
+    container_name: mahasiswa-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: mahasiswa_db
+    volumes:
+      - mahasiswa_db_data:/var/lib/mysql
+    networks:
+      - education-network
+
+volumes:
+  mahasiswa_db_data:
+
+networks:
+  education-network:
+    driver: bridge
+    name: education-network
