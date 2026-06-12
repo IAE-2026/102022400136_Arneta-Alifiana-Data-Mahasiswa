@@ -1,0 +1,139 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Service A - Mahasiswa API",
+        "description": "API untuk manajemen data mahasiswa dalam ekosistem Education System",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/mahasiswa": {
+            "get": {
+                "tags": [
+                    "Mahasiswa"
+                ],
+                "summary": "Lihat seluruh daftar mahasiswa",
+                "operationId": "074621ede08e4f315ab68b88fa9446d3",
+                "responses": {
+                    "200": {
+                        "description": "Berhasil mengambil daftar mahasiswa"
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Mahasiswa"
+                ],
+                "summary": "Catat mahasiswa baru",
+                "operationId": "e0042b9b650308ff84fdcf2751077e14",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nim",
+                                    "nama",
+                                    "email",
+                                    "prodi",
+                                    "angkatan"
+                                ],
+                                "properties": {
+                                    "nim": {
+                                        "type": "string",
+                                        "example": "1301210001"
+                                    },
+                                    "nama": {
+                                        "type": "string",
+                                        "example": "Budi Santoso"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "budi@student.tel.ac.id"
+                                    },
+                                    "prodi": {
+                                        "type": "string",
+                                        "example": "S1 Sistem Informasi"
+                                    },
+                                    "angkatan": {
+                                        "type": "integer",
+                                        "example": 2021
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": "aktif"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Mahasiswa berhasil dicatat"
+                    },
+                    "422": {
+                        "description": "Validasi gagal"
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/mahasiswa/{nim}": {
+            "get": {
+                "tags": [
+                    "Mahasiswa"
+                ],
+                "summary": "Lihat detail mahasiswa berdasarkan NIM",
+                "operationId": "5cc81cc61c8513dfa24a469b4f66182a",
+                "parameters": [
+                    {
+                        "name": "nim",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data mahasiswa ditemukan"
+                    },
+                    "404": {
+                        "description": "Mahasiswa tidak ditemukan"
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "type": "apiKey",
+                "name": "X-API-KEY",
+                "in": "header"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Mahasiswa",
+            "description": "Mahasiswa"
+        }
+    ]
+}

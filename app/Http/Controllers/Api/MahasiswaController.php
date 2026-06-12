@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Mahasiswa;
+use App\Models\SsoUser;
+use App\Services\SoapAuditService;
+use App\Services\RabbitMQService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use OpenApi\Attributes as OA;
@@ -21,6 +24,15 @@ use OpenApi\Attributes as OA;
 )]
 class MahasiswaController extends Controller
 {
+    protected $soapService;
+    protected $rabbitMQService;
+
+    public function __construct(SoapAuditService $soapService, RabbitMQService $rabbitMQService)
+    {
+        $this->soapService     = $soapService;
+        $this->rabbitMQService = $rabbitMQService;
+    }
+
     #[OA\Get(
         path: "/api/v1/mahasiswa",
         summary: "Lihat seluruh daftar mahasiswa",
@@ -37,7 +49,7 @@ class MahasiswaController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Daftar mahasiswa berhasil diambil.',
-            'data' => $mahasiswa,
+            'data'    => $mahasiswa,
         ], 200);
     }
 
@@ -62,14 +74,14 @@ class MahasiswaController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => "Mahasiswa dengan NIM {$nim} tidak ditemukan.",
-                'data' => null,
+                'data'    => null,
             ], 404);
         }
 
         return response()->json([
             'success' => true,
             'message' => 'Data mahasiswa berhasil diambil.',
-            'data' => $mahasiswa,
+            'data'    => $mahasiswa,
         ], 200);
     }
 
@@ -108,12 +120,87 @@ class MahasiswaController extends Controller
             'status'   => ['nullable', Rule::in(['aktif', 'cuti', 'lulus', 'do'])],
         ]);
 
+        // Simpan data mahasiswa
         $mahasiswa = Mahasiswa::create($validated);
+
+        // Ambil JWT Token (utamakan M2M token dari API Key, fallback ke SSO User yang login)
+        $token = $this->getM2MToken();
+        if (!$token) {
+            $ssoUser = SsoUser::latest()->first();
+            if ($ssoUser) {
+                $token = $ssoUser->jwt_token;
+            }
+        }
+
+        $receiptNumber = null;
+        $rabbitStatus  = null;
+
+        if ($token) {
+            // Kirim Audit SOAP
+            $auditResult = $this->soapService->sendAudit(
+                'MahasiswaBaru',
+                [
+                    'nim'      => $mahasiswa->nim,
+                    'nama'     => $mahasiswa->nama,
+                    'prodi'    => $mahasiswa->prodi,
+                    'angkatan' => $mahasiswa->angkatan,
+                    'status'   => $mahasiswa->status,
+                    'waktu'    => now()->toISOString(),
+                ],
+                $token
+            );
+            $receiptNumber = $auditResult['receipt_number'];
+
+            // Publish Event RabbitMQ
+            $rabbitResult = $this->rabbitMQService->publish(
+                'mahasiswa.created',
+                [
+                    'nim'      => $mahasiswa->nim,
+                    'nama'     => $mahasiswa->nama,
+                    'prodi'    => $mahasiswa->prodi,
+                    'angkatan' => $mahasiswa->angkatan,
+                    'status'   => $mahasiswa->status,
+                ],
+                $token
+            );
+            $rabbitStatus = $rabbitResult['success'] ? 'terkirim' : 'gagal';
+        }
 
         return response()->json([
             'success' => true,
             'message' => 'Mahasiswa berhasil dicatat.',
-            'data' => $mahasiswa,
+            'data'    => [
+                'mahasiswa'      => $mahasiswa,
+                'receipt_number' => $receiptNumber,
+                'rabbit_status'  =>  $rabbitStatus,
+            ],
         ], 201);
+    }
+
+    /**
+     * Ambil M2M token secara dinamis menggunakan API Key
+     */
+    private function getM2MToken(): ?string
+    {
+        $ssoUrl = 'https://iae-sso.virtualfri.id';
+        $apiKey = config('app.api_key');
+
+        if (!$apiKey) {
+            return null;
+        }
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::post("{$ssoUrl}/api/v1/auth/token", [
+                'api_key' => $apiKey,
+            ]);
+
+            if ($response->successful()) {
+                return $response->json()['token'] ?? null;
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Failed to retrieve M2M token: " . $e->getMessage());
+        }
+
+        return null;
     }
 }
