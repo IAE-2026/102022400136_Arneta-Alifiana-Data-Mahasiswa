@@ -14,7 +14,7 @@ services:
       - DB_DATABASE= database_data_mahasiswa
       - DB_USERNAME=root
       - DB_PASSWORD=secret
-      - API_KEY=secret-api-key-mahasiswa-123
+      - API_KEY=KEY-MHS-233
     depends_on:
       - db
     networks:
