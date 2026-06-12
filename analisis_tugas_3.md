@@ -12,7 +12,7 @@ yang terus nanti tuh XML nya bakalan di krim ke server pusat. jika server pusat 
 
 ## Sequence Diagram Aliran Integrasi Internal
 
-![Sequence Diagram Robustness Service A](sequence_diagram_robustness.jpg)
+![alt text](image.png)
 - penjelasannya : 
 
 Client/admin mengirimkan perintah unutk menambah mahasiswa baru lwat API Gateway dengan membawa API Key nya sendiri (KEY-MHS-233), trs si API Gateway nya itu meneruskan nnya ke MahasiswaController, nah di MahasiswaController ini ada data maba nya kaya (NIM, nama, EMAIL), nah dia tuh bakalan di validasi dulu, klo data nya valid dia bakalan nyuruh Entity Mahasiswa untuk menyimpan data nya ke database dan database nya akan memberikan respons kalo udah di simpen.
