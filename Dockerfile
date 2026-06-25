@@ -23,5 +23,5 @@ EXPOSE 8000
 
 CMD bash -c "echo 'Waiting for MySQL...' && \
     sleep 10 && \
-    php artisan migrate:fresh --force && \
+    php artisan migrate --force && \
     php-fpm -D && nginx -g 'daemon off;'"

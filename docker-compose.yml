@@ -26,6 +26,7 @@ services:
   db:
     image: mysql:8.0
     container_name: mahasiswa-db
+    command: --skip-name-resolve
     ports:
       - "3307:3306"
     environment:
