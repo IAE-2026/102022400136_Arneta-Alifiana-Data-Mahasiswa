@@ -15,7 +15,73 @@
                 "operationId": "074621ede08e4f315ab68b88fa9446d3",
                 "responses": {
                     "200": {
-                        "description": "Berhasil mengambil daftar mahasiswa"
+                        "description": "Berhasil mengambil daftar mahasiswa",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data retrieved successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "example": 1
+                                                    },
+                                                    "nim": {
+                                                        "type": "string",
+                                                        "example": "1301210001"
+                                                    },
+                                                    "nama": {
+                                                        "type": "string",
+                                                        "example": "Budi Santoso"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "budi@student.tel.ac.id"
+                                                    },
+                                                    "prodi": {
+                                                        "type": "string",
+                                                        "example": "S1 Sistem Informasi"
+                                                    },
+                                                    "angkatan": {
+                                                        "type": "integer",
+                                                        "example": 2021
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "aktif"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "service_name": {
+                                                    "type": "string",
+                                                    "example": "Data-Mahasiswa-Service"
+                                                },
+                                                "api_version": {
+                                                    "type": "string",
+                                                    "example": "v1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -75,10 +141,125 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Mahasiswa berhasil dicatat"
+                        "description": "Mahasiswa berhasil dicatat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Mahasiswa berhasil dicatat."
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "mahasiswa": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "nim": {
+                                                            "type": "string",
+                                                            "example": "1301210001"
+                                                        },
+                                                        "nama": {
+                                                            "type": "string",
+                                                            "example": "Budi Santoso"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "budi@student.tel.ac.id"
+                                                        },
+                                                        "prodi": {
+                                                            "type": "string",
+                                                            "example": "S1 Sistem Informasi"
+                                                        },
+                                                        "angkatan": {
+                                                            "type": "integer",
+                                                            "example": 2021
+                                                        },
+                                                        "status": {
+                                                            "type": "string",
+                                                            "example": "aktif"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "example": "2026-06-25T03:47:40.000000Z"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "example": "2026-06-25T03:47:40.000000Z"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "receipt_number": {
+                                                    "type": "string",
+                                                    "example": "IAE-LOG-12345",
+                                                    "nullable": true
+                                                },
+                                                "rabbit_status": {
+                                                    "type": "string",
+                                                    "example": "terkirim",
+                                                    "nullable": true
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "service_name": {
+                                                    "type": "string",
+                                                    "example": "Data-Mahasiswa-Service"
+                                                },
+                                                "api_version": {
+                                                    "type": "string",
+                                                    "example": "v1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "422": {
-                        "description": "Validasi gagal"
+                        "description": "Validasi gagal",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation failed."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "nim": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The nim has already been taken."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -88,16 +269,16 @@
                 ]
             }
         },
-        "/api/v1/mahasiswa/{nim}": {
+        "/api/v1/mahasiswa/{id}": {
             "get": {
                 "tags": [
                     "Mahasiswa"
                 ],
-                "summary": "Lihat detail mahasiswa berdasarkan NIM",
-                "operationId": "5cc81cc61c8513dfa24a469b4f66182a",
+                "summary": "Lihat detail mahasiswa berdasarkan ID or NIM",
+                "operationId": "a234c3ccf3047ab381190dd162db20c0",
                 "parameters": [
                     {
-                        "name": "nim",
+                        "name": "id",
                         "in": "path",
                         "required": true,
                         "schema": {
@@ -107,10 +288,103 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Data mahasiswa ditemukan"
+                        "description": "Data mahasiswa ditemukan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Data retrieved successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "nim": {
+                                                    "type": "string",
+                                                    "example": "1301210001"
+                                                },
+                                                "nama": {
+                                                    "type": "string",
+                                                    "example": "Budi Santoso"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "budi@student.tel.ac.id"
+                                                },
+                                                "prodi": {
+                                                    "type": "string",
+                                                    "example": "S1 Sistem Informasi"
+                                                },
+                                                "angkatan": {
+                                                    "type": "integer",
+                                                    "example": 2021
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "aktif"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "example": "2026-06-25T03:47:40.000000Z"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "example": "2026-06-25T03:47:40.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "meta": {
+                                            "properties": {
+                                                "service_name": {
+                                                    "type": "string",
+                                                    "example": "Data-Mahasiswa-Service"
+                                                },
+                                                "api_version": {
+                                                    "type": "string",
+                                                    "example": "v1"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Mahasiswa tidak ditemukan"
+                        "description": "Mahasiswa tidak ditemukan",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Mahasiswa dengan ID atau NIM 999 tidak ditemukan."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": null,
+                                            "nullable": true
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -125,7 +399,7 @@
         "securitySchemes": {
             "ApiKeyAuth": {
                 "type": "apiKey",
-                "name": "X-API-KEY",
+                "name": "X-IAE-KEY",
                 "in": "header"
             }
         }

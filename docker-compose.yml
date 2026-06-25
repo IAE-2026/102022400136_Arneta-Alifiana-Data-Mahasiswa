@@ -9,12 +9,15 @@ services:
     environment:
       - APP_ENV=local
       - APP_KEY=${APP_KEY}
+      - APP_URL=http://localhost:8001
       - DB_HOST=db
       - DB_PORT=3306
       - DB_DATABASE= database_data_mahasiswa
       - DB_USERNAME=root
       - DB_PASSWORD=secret
-      - API_KEY=KEY-MHS-233
+      - API_KEY=102022400136
+    volumes:
+      - .:/var/www
     depends_on:
       - db
     networks:
