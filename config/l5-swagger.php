@@ -8,7 +8,7 @@ return [
                 'title' => 'Mahasiswa Service API',
             ],
             'routes' => [
-                'api' => 'api/documentation',
+                'api' => 'docs',
             ],
             'paths' => [
                 'use_absolute_path' => false,
@@ -23,7 +23,7 @@ return [
     ],
     'defaults' => [
         'routes' => [
-            'docs' => 'docs',
+            'docs' => 'api-docs',
             'oauth2_callback' => 'api/oauth2-callback',
             'middleware' => [
                 'api' => [],
