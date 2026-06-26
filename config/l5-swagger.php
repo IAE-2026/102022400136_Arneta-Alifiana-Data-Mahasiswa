@@ -23,7 +23,7 @@ return [
     ],
     'defaults' => [
         'routes' => [
-            'docs' => 'docs',
+            'docs' => 'docs/api-docs.json',
             'oauth2_callback' => 'api/oauth2-callback',
             'middleware' => [
                 'api' => [],
