@@ -22,6 +22,11 @@ COPY docker/nginx.conf /etc/nginx/sites-enabled/default
 EXPOSE 8000
 
 CMD bash -c "echo 'Waiting for MySQL...' && \
-    sleep 10 && \
+    for i in {1..30}; do \
+        if php artisan db:monitor > /dev/null 2>&1; then \
+            break; \
+        fi; \
+        sleep 2; \
+    done && \
     php artisan migrate --force && \
     php-fpm -D && nginx -g 'daemon off;'"
