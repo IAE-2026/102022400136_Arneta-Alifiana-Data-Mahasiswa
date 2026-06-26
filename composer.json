@@ -11,7 +11,8 @@
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
-        "nuwave/lighthouse": "^6.40"
+        "nuwave/lighthouse": "^6.40",
+        "mll-lab/laravel-graphql-playground": "^3.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
